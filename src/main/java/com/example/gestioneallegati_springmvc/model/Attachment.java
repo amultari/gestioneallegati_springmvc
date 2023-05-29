@@ -1,5 +1,7 @@
 package com.example.gestioneallegati_springmvc.model;
 
+import java.time.LocalDate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,6 +24,8 @@ public class Attachment {
 	private String contentType;
 	@Column(name = "descrizione")
 	private String descrizione;
+	@Column(name = "datacreazione")
+	private LocalDate dataCreazione;
 
 	@Lob
 	private byte[] payload;
@@ -29,20 +33,14 @@ public class Attachment {
 	public Attachment() {
 	}
 
-	public Attachment(Long id, String nomeFile, String contentType, byte[] payload) {
-		super();
-		this.id = id;
-		this.nomeFile = nomeFile;
-		this.contentType = contentType;
-		this.payload = payload;
-	}
-
-	public Attachment(Long id, String nomeFile, String contentType, String descrizione, byte[] payload) {
+	public Attachment(Long id, String nomeFile, String contentType, String descrizione, LocalDate dataCreazione,
+			byte[] payload) {
 		super();
 		this.id = id;
 		this.nomeFile = nomeFile;
 		this.contentType = contentType;
 		this.descrizione = descrizione;
+		this.dataCreazione = dataCreazione;
 		this.payload = payload;
 	}
 
@@ -84,6 +82,14 @@ public class Attachment {
 
 	public void setDescrizione(String descrizione) {
 		this.descrizione = descrizione;
+	}
+
+	public LocalDate getDataCreazione() {
+		return dataCreazione;
+	}
+
+	public void setDataCreazione(LocalDate dataCreazione) {
+		this.dataCreazione = dataCreazione;
 	}
 
 }

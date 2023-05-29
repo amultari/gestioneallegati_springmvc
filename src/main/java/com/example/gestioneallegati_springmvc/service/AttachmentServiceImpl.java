@@ -1,5 +1,6 @@
 package com.example.gestioneallegati_springmvc.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 	@Override
 	@Transactional
 	public void inserisciNuovo(Attachment entityInstance) {
+		entityInstance.setDataCreazione(LocalDate.now());
 		repository.save(entityInstance);
 	}
 

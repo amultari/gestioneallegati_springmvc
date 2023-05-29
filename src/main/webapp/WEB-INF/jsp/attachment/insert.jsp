@@ -30,7 +30,7 @@
 					    
 					    		<h6 class="card-title">I campi con <span class="text-danger">*</span> sono obbligatori</h6>
 			
-								<form enctype="multipart/form-data"  method="post" action="save" validate class="row g-3">
+								<form enctype="multipart/form-data"  method="post" action="save" novalidate="novalidate" class="row g-3">
 								
 									<div class="col-md-6 datiMalattia ">
 										<label for="descrizione" class="form-label">Descrizione <span class="text-danger">*</span></label>

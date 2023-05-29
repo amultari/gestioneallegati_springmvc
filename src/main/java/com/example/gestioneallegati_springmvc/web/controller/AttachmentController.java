@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import com.example.gestioneallegati_springmvc.model.Attachment;
+import com.example.gestioneallegati_springmvc.dto.AttachmentDTO;
 import com.example.gestioneallegati_springmvc.service.AttachmentService;
 
 @Controller
@@ -29,23 +29,23 @@ public class AttachmentController {
 
 	@GetMapping
 	public ModelAndView listAll() {
-		ModelAndView mv = new ModelAndView();
-		List<Attachment> result = attachmentService.listAllElements();
-		mv.addObject("attachment_list_attribute", result);
-		mv.setViewName("attachment/list");
-		return mv;
+		List<AttachmentDTO> result = AttachmentDTO
+				.createAttachmentDTOListFromModelList(attachmentService.listAllElements());
+		return new ModelAndView("attachment/list", "attachment_list_attribute", result);
 	}
 
 	@GetMapping("/insert")
 	public String createNew(Model model) {
-		model.addAttribute("attachment_richiesta_permesso_attr", new Attachment());
+		model.addAttribute("attachment_richiesta_permesso_attr", new AttachmentDTO());
 		return "attachment/insert";
 	}
 
 	@PostMapping("/save")
-	public String saveNewEntry(@RequestParam("file") MultipartFile file, Attachment attachment, Model model,
+	public String saveNewEntry(@RequestParam("file") MultipartFile file, AttachmentDTO attachment, Model model,
 			RedirectAttributes redirectAttrs) {
 
+		// la validazione è realizzata 'alla buona', in un progetto serio andrebbe
+		// sistemata
 		if (file == null || file.isEmpty() || attachment.getDescrizione().isBlank()) {
 			model.addAttribute("errorMessage", "Inserire dei valori");
 			return "attachment/insert";
@@ -59,7 +59,7 @@ public class AttachmentController {
 			throw new RuntimeException("Problema nell'upload file", e);
 		}
 
-		attachmentService.inserisciNuovo(attachment);
+		attachmentService.inserisciNuovo(attachment.buildModelFromDTO());
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/attachment";
@@ -68,7 +68,8 @@ public class AttachmentController {
 	@GetMapping("/showAttachment/{idAttachment}")
 	public ResponseEntity<byte[]> showAttachment(@PathVariable(required = true) Long idAttachment) {
 
-		Attachment file = attachmentService.caricaSingoloElemento(idAttachment);
+		AttachmentDTO file = AttachmentDTO
+				.buildAttachmentDTOFromModel(attachmentService.caricaSingoloElemento(idAttachment));
 
 		return ResponseEntity.ok()
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getNomeFile() + "\"")

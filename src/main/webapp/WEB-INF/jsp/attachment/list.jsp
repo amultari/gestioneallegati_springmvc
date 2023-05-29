@@ -1,5 +1,6 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <!doctype html>
 <html lang="it" class="h-100" >
 	 <head>
@@ -48,7 +49,9 @@
 				                    <tr>
 			                         	<th>Id</th>
 				                        <th>Nome File</th>
+				                        <th>Descrizione</th>
 				                        <th>Content Type</th>
+				                        <th>Data Creazione</th>
 				                        <th>Azioni</th>
 				                    </tr>
 				                </thead>
@@ -57,7 +60,12 @@
 										<tr>
 											<td>${attachmentItem.id }</td>
 											<td>${attachmentItem.nomeFile}</td>
+											<td>${attachmentItem.descrizione}</td>
 											<td>${attachmentItem.contentType }</td>
+											<td>
+												<fmt:parseDate value="${attachmentItem.dataCreazione}" pattern="yyyy-MM-dd" var="localDateToBeParsed" type="date"/>
+												<fmt:formatDate pattern="dd/MM/yyyy" value="${localDateToBeParsed}" />
+											</td>
 											<td>
 												<a class="btn  btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/attachment/showAttachment/${attachmentItem.id }">Visualizza Allegato</a>
 											</td>
